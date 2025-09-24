@@ -1,5 +1,5 @@
 ﻿# QuanMBL-FastApi_Fresher
-Dùng Thunder client để test API 
+Dùng Thunder client để test API và Postmand (do lỗi postmand lúc đầu dùng đỡ thunder)
 
 1. GET /A → hello world
 <img width="1077" height="305" alt="image" src="https://github.com/user-attachments/assets/5eccfb7d-d77c-4f7c-a2b0-c6c7f682d5a8" />
