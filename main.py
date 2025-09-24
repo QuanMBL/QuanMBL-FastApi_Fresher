@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException, Header, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from pydantic import BaseModel
 from typing import Optional, Dict, Any
 import json
 import os
@@ -47,11 +48,18 @@ def save_routes():
 # Load routes khi khởi động
 load_routes()
 
+# Pydantic models
+class RouteCreate(BaseModel):
+    path: str
+    message: str
+
 def verify_api_key(x_api_key: Optional[str] = Header(None)):
     if x_api_key != ADMIN_API_KEY:
         raise HTTPException(status_code=401, detail="Invalid API Key")
     return x_api_key
 
+
+# API cơ bản 
 @app.get("/healthz")
 async def health_check():
     return {"status": "ok"}
@@ -60,14 +68,19 @@ async def health_check():
 async def get_a():
     return {"message": "hello world"}
 
+
+
+
 # Admin API endpoints
 @app.post("/admin/routes")
 async def create_route(
-    path: str,
-    message: str,
+    route_data: RouteCreate,
     api_key: str = Depends(verify_api_key)
 ):
     """Tạo route mới với path và message tùy chỉnh"""
+    path = route_data.path
+    message = route_data.message
+    
     if path.startswith("/"):
         path = path[1:]  # Bỏ dấu / ở đầu
     
