@@ -36,6 +36,10 @@ def load_routes():
         except Exception as e:
             print(f"Error loading routes: {e}")
             dynamic_routes = {}
+    else:
+        # Nếu file không tồn tại, tạo file trống
+        dynamic_routes = {}
+        save_routes()
 
 def save_routes():
     """Lưu routes vào file JSON"""
@@ -120,3 +124,11 @@ async def delete_route(path: str, api_key: str = Depends(verify_api_key)):
     save_routes()
     
     return {"message": f"Route /{path} deleted successfully"}
+
+@app.post("/admin/reset")
+async def reset_routes(api_key: str = Depends(verify_api_key)):
+    """Reset tất cả routes (cần restart server)"""
+    global dynamic_routes
+    dynamic_routes = {}
+    save_routes()
+    return {"message": "All routes reset. Please restart server to apply changes."}
